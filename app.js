@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
+const engine = require("ejs-mate");
 const Foodtruck = require("./models/foodtruck");
 
 mongoose.connect("mongodb://127.0.0.1:27017/foodtruck");
@@ -12,6 +13,8 @@ db.on("error", console.error.bind(console, "conection error"));
 db.once("open", () => {
   console.log("Database Connected");
 });
+
+app.engine("ejs", engine);
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");

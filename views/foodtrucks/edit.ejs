@@ -1,24 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("layouts/boilerplate") -%>
+    <div class="row">
+        <h1 class="text-center">Edit foodtruck</h1>
+        <div class="col-6 offset-3">
+            <form action="/foodtruck/<%= foodtruck._id %>?_method=PUT" method="post" class="needs-validation"
+                novalidate>
+                <div class="mb-3">
+                    <label for="name" class="form-label">foodtruck Name</label>
+                    <input type="text" class="form-control" id="name" name="foodtruck[name]"
+                        value="<%= foodtruck.name %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="foodtruck[location]"
+                        value="<%= foodtruck.location %>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="price-addon1">RM</span>
+                        <input type="text" class="form-control" placeholder="0.0" aria-label="price"
+                            aria-describedby="price-addon1" name="foodtruck[price]" value="<%= foodtruck.price %>"
+                            required>
+                    </div>
+                </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Foodtruck</title>
-</head>
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description</label>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Put description here" id="desc"
+                            name="foodtruck[desc]" style=" height: 100px" required><%=foodtruck.desc %></textarea>
+                    </div>
+                </div>
 
-<body>
-    <h1>Edit Foodtruck</h1>
-    <form action="/foodtruck/<%= foodtruck._id %>?_method=PUT" method="post">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="foodtruck[name]" placeholder="Name" value="<%= foodtruck.name %>">
-        <label for="location">Location</label>
-        <input type="text" id="location" name="foodtruck[location]" placeholder="Location"
-            value="<%= foodtruck.location %>">
-        <button>Submit</button>
-    </form>
-    <a href="/foodtruck/<%= foodtruck._id %>">Back</a>
-</body>
-
-</html>
+                <button class="btn btn-info text-white" style>Update venue</button>
+                <a href="/foodtruck" class="btn">Cancel</a>
+            </form>
+        </div>
+    </div>

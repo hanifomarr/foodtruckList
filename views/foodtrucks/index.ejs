@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodtruck</title>
-</head>
-
-<body>
+<% layout("layouts/boilerplate") -%>
     <h1>List of Foodtrucks</h1>
+    <% for(let foodtruck of foodtrucks){ %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="image-fluid" src="<%= foodtruck.img %>" alt="" style="width: 22rem;">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= foodtruck.name %>
+                        </h5>
+                        <p class="card-text">
+                            <%= foodtruck.location %>
+                        </p>
+                        <a href="/foodtruck/<%= foodtruck._id %>" class="btn btn-primary">Show</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <a href="/foodtruck/new">Add new Foodtruck</a>
+        <% } %>
 
-    <ul>
-        <% for(let foodtruck of foodtrucks){ %>
-            <li><a href="/foodtruck/<%= foodtruck._id %>">
-                    <%= foodtruck.name %>
-                </a>
-            </li>
-            <% } %>
-    </ul>
-
-</body>
-
-</html>
+            <a href="/venue/new">Add new venue</a>

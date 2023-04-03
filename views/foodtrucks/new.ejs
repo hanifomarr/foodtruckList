@@ -1,23 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("layouts/boilerplate") -%>
+    <div class="row">
+        <h1 class="text-center">Add new venue</h1>
+        <div class="col-6 offset-3">
+            <form action="/foodtruck" method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="name" class="form-label">foodtruck Name</label>
+                    <input type="text" class="form-control" id="name" name="foodtruck[name]" required>
+                    <div class="invalid-feedback">
+                        Please insert a foodtruck name.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="foodtruck[location]" required>
+                    <div class="invalid-feedback">
+                        Please choose a location.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="price-addon1">RM</span>
+                        <input type="text" class="form-control" placeholder="0.0" aria-label="price"
+                            aria-describedby="price-addon1" name="foodtruck[price]" required>
+                        <div class="invalid-feedback">
+                            Please insert price.
+                        </div>
+                    </div>
+                </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Foodtruck</title>
-</head>
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description</label>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Put description here" id="desc"
+                            name="foodtruck[desc]" style=" height: 100px" required></textarea>
+                        <div class="invalid-feedback">
+                            Please insert a description.
+                        </div>
+                    </div>
+                </div>
 
-<body>
-    <h1>Add new Foodtruck</h1>
-    <form action="/foodtruck" method="post">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="foodtruck[name]" placeholder="Name">
-        <label for="location">Location</label>
-        <input type="text" id="location" name="foodtruck[location]" placeholder="Location">
-        <button>Submit</button>
-    </form>
-    <a href="/foodtruck">Back</a>
-</body>
-
-</html>
+                <button class="btn btn-success">Submit</button>
+                <a href="/foodtruck" class="btn">Cancel</a>
+            </form>
+        </div>
+    </div>

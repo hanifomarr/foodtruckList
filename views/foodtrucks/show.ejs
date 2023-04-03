@@ -1,28 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= foodtruck.name %>
-    </title>
-</head>
-
-<body>
-    <h1>
-        <%= foodtruck.name %>
-    </h1>
-    <h2>
-        <%= foodtruck.location %>
-    </h2>
-
-    <a href="/foodtruck">Back</a>
-    <a href="/foodtruck/<%= foodtruck._id %>/edit">Edit</a>
-    <form action="/foodtruck/<%= foodtruck._id %>?_method=DELETE" method="post">
-        <button>Delete</button>
-    </form>
-</body>
-
-</html>
+<% layout("layouts/boilerplate") -%>
+    <div class="row">
+        <div class="col-10 offset-1">
+            <div class="card">
+                <img src="<%= foodtruck.img %>" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= foodtruck.name %>
+                    </h5>
+                    <p class="card-text">
+                        <%= foodtruck.desc %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">RM <%= foodtruck.price %>
+                    </li>
+                    <li class="list-group-item">
+                        <%= foodtruck.location %>
+                    </li>
+                </ul>
+                <div class=" d-flex justify-content-between card-body">
+                    <div>
+                        <a href="/foodtruck/<%= foodtruck._id %>/edit"
+                            class="card-link btn btn-primary text-white">Update
+                            Venue</a>
+                        <a href="/foodtruck" class="btn card-link">Back</a>
+                    </div>
+                    <div>
+                        <form action="/foodtruck/<%= foodtruck._id %>?_method=DELETE" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <form action="" method="post" class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="rating">Rating</label>
+                            <input class="form-range" type="range" name="rating" id="rating" min="1" max="5">
+                        </div>
+                        <div class="mb-3">
+                            <label for="review" class="form-label">Review</label>
+                            <textarea class="form-control" name="review[body]" id="review" cols="30"
+                                rows="3"></textarea>
+                        </div>
+                        <button class="btn btn-success">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
