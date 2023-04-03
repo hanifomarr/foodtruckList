@@ -7,6 +7,7 @@ const foodtruckSchema = new Schema({
   img: String,
   desc: String,
   price: Number,
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 });
 
 module.exports = mongoose.model("Foodtruck", foodtruckSchema);

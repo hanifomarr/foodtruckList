@@ -4,9 +4,10 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const engine = require("ejs-mate");
-const Foodtruck = require("./models/foodtruck");
 const AppError = require("./utils/AppError");
 const CatchAsync = require("./utils/CatchAsync");
+const Foodtruck = require("./models/foodtruck");
+const Review = require("./models/review");
 
 mongoose.connect("mongodb://127.0.0.1:27017/foodtruck");
 
@@ -44,7 +45,7 @@ app.post("/foodtruck", (req, res) => {
 
 app.get("/foodtruck/:id", async (req, res) => {
   const { id } = req.params;
-  const foodtruck = await Foodtruck.findById(id);
+  const foodtruck = await Foodtruck.findById(id).populate("reviews");
   res.render("foodtrucks/show", { foodtruck });
 });
 
@@ -66,6 +67,22 @@ app.delete("/foodtruck/:id", async (req, res) => {
   const { id } = req.params;
   await Foodtruck.findByIdAndDelete(id);
   res.redirect("/foodtruck");
+});
+
+app.post("/foodtruck/:id/review", async (req, res) => {
+  const foodtruck = await Foodtruck.findById(req.params.id);
+  const review = new Review(req.body.review);
+  foodtruck.reviews.push(review);
+  await review.save();
+  await foodtruck.save();
+  res.redirect(`/foodtruck/${foodtruck._id}`);
+});
+
+app.delete("/foodtruck/:id/review/:reviewId", async (req, res) => {
+  const { id, reviewId } = req.params;
+  await Foodtruck.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+  await Review.findByIdAndDelete(reviewId);
+  res.redirect(`/foodtruck/${id}`);
 });
 
 app.listen(3000, () => {
