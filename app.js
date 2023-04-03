@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const engine = require("ejs-mate");
 const Foodtruck = require("./models/foodtruck");
+const AppError = require("./utils/AppError");
+const CatchAsync = require("./utils/CatchAsync");
 
 mongoose.connect("mongodb://127.0.0.1:27017/foodtruck");
 
