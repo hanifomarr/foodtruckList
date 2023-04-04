@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const engine = require("ejs-mate");
 const AppError = require("./utils/AppError");
 const CatchAsync = require("./utils/CatchAsync");
+const { foodtruckSchema } = require("./schemas");
 const Foodtruck = require("./models/foodtruck");
 const Review = require("./models/review");
 
@@ -23,6 +24,16 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+
+const validateFoodtruck = (req, res, next) => {
+  const { error } = foodtruckSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new AppError(msg, 500);
+  } else {
+    next();
+  }
+};
 
 app.get("/", (req, res) => {
   res.render("homepage");
@@ -42,6 +53,7 @@ app.get("/foodtruck/new", (req, res) => {
 
 app.post(
   "/foodtruck",
+  validateFoodtruck,
   CatchAsync(async (req, res, next) => {
     const newFoodtruck = new Foodtruck(req.body.foodtruck);
     await newFoodtruck.save();
@@ -69,6 +81,7 @@ app.get(
 
 app.put(
   "/foodtruck/:id",
+  validateFoodtruck,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
     const updateFoodtruck = await Foodtruck.findByIdAndUpdate(id, {
