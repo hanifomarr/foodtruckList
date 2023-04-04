@@ -6,7 +6,7 @@ const methodOverride = require("method-override");
 const engine = require("ejs-mate");
 const AppError = require("./utils/AppError");
 const CatchAsync = require("./utils/CatchAsync");
-const { foodtruckSchema } = require("./schemas");
+const { foodtruckSchema, reviewSchema } = require("./schemas");
 const Foodtruck = require("./models/foodtruck");
 const Review = require("./models/review");
 
@@ -27,6 +27,16 @@ app.use(methodOverride("_method"));
 
 const validateFoodtruck = (req, res, next) => {
   const { error } = foodtruckSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new AppError(msg, 500);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new AppError(msg, 500);
@@ -102,6 +112,7 @@ app.delete(
 
 app.post(
   "/foodtruck/:id/review",
+  validateReview,
   CatchAsync(async (req, res) => {
     const foodtruck = await Foodtruck.findById(req.params.id);
     const review = new Review(req.body.review);
