@@ -5,10 +5,8 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const engine = require("ejs-mate");
 const AppError = require("./utils/AppError");
-const CatchAsync = require("./utils/CatchAsync");
-const { foodtruckSchema, reviewSchema } = require("./schemas");
-const Foodtruck = require("./models/foodtruck");
-const Review = require("./models/review");
+const foodtruckRouter = require("./routes/foodtrucks");
+const reviewRouter = require("./routes/reviews");
 
 mongoose.connect("mongodb://127.0.0.1:27017/foodtruck");
 
@@ -25,113 +23,12 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-const validateFoodtruck = (req, res, next) => {
-  const { error } = foodtruckSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new AppError(msg, 500);
-  } else {
-    next();
-  }
-};
-
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new AppError(msg, 500);
-  } else {
-    next();
-  }
-};
+app.use("/foodtruck", foodtruckRouter);
+app.use("/foodtruck/:id/review", reviewRouter);
 
 app.get("/", (req, res) => {
   res.render("homepage");
 });
-
-app.get(
-  "/foodtruck",
-  CatchAsync(async (req, res) => {
-    const foodtrucks = await Foodtruck.find({});
-    res.render("foodtrucks/index", { foodtrucks });
-  })
-);
-
-app.get("/foodtruck/new", (req, res) => {
-  res.render("foodtrucks/new");
-});
-
-app.post(
-  "/foodtruck",
-  validateFoodtruck,
-  CatchAsync(async (req, res, next) => {
-    const newFoodtruck = new Foodtruck(req.body.foodtruck);
-    await newFoodtruck.save();
-    res.redirect(`/foodtruck/${newFoodtruck._id}`);
-  })
-);
-
-app.get(
-  "/foodtruck/:id",
-  CatchAsync(async (req, res) => {
-    const { id } = req.params;
-    const foodtruck = await Foodtruck.findById(id).populate("reviews");
-    res.render("foodtrucks/show", { foodtruck });
-  })
-);
-
-app.get(
-  "/foodtruck/:id/edit",
-  CatchAsync(async (req, res) => {
-    const { id } = req.params;
-    const foodtruck = await Foodtruck.findById(id);
-    res.render("foodtrucks/edit", { foodtruck });
-  })
-);
-
-app.put(
-  "/foodtruck/:id",
-  validateFoodtruck,
-  CatchAsync(async (req, res) => {
-    const { id } = req.params;
-    const updateFoodtruck = await Foodtruck.findByIdAndUpdate(id, {
-      ...req.body.foodtruck,
-    });
-    res.redirect(`/foodtruck/${updateFoodtruck._id}`);
-  })
-);
-
-app.delete(
-  "/foodtruck/:id",
-  CatchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Foodtruck.findByIdAndDelete(id);
-    res.redirect("/foodtruck");
-  })
-);
-
-app.post(
-  "/foodtruck/:id/review",
-  validateReview,
-  CatchAsync(async (req, res) => {
-    const foodtruck = await Foodtruck.findById(req.params.id);
-    const review = new Review(req.body.review);
-    foodtruck.reviews.push(review);
-    await review.save();
-    await foodtruck.save();
-    res.redirect(`/foodtruck/${foodtruck._id}`);
-  })
-);
-
-app.delete(
-  "/foodtruck/:id/review/:reviewId",
-  CatchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    await Foodtruck.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/foodtruck/${id}`);
-  })
-);
 
 app.all("*", (req, res, next) => {
   next(new AppError("Not Found", 404));
