@@ -4,7 +4,6 @@ const AppError = require("../utils/AppError");
 const CatchAsync = require("../utils/CatchAsync");
 const { foodtruckSchema } = require("../schemas");
 const Foodtruck = require("../models/foodtruck");
-const Review = require("../models/review");
 
 const validateFoodtruck = (req, res, next) => {
   const { error } = foodtruckSchema.validate(req.body);

@@ -12,6 +12,7 @@ const LocalStrategy = require("passport-local");
 const AppError = require("./utils/AppError");
 const foodtruckRouter = require("./routes/foodtrucks");
 const reviewRouter = require("./routes/reviews");
+const userRouter = require("./routes/users");
 const User = require("./models/user");
 
 mongoose.connect("mongodb://127.0.0.1:27017/foodtruck");
@@ -56,12 +57,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/fakeuser", async (req, res) => {
-  const user = new User({ email: "hanif@gmail.com", username: "semann" });
-  const newUser = await User.register(user, "monkey");
-  res.send(newUser);
-});
-
+app.use("/", userRouter);
 app.use("/foodtruck", foodtruckRouter);
 app.use("/foodtruck/:id/review", reviewRouter);
 
