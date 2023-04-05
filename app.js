@@ -4,6 +4,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const engine = require("ejs-mate");
+const session = require("express-session");
+const flash = require("connect-flash");
 const AppError = require("./utils/AppError");
 const foodtruckRouter = require("./routes/foodtrucks");
 const reviewRouter = require("./routes/reviews");
@@ -16,6 +18,17 @@ db.once("open", () => {
   console.log("Database Connected");
 });
 
+const sessionConfig = {
+  secret: "somethingSecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
 app.engine("ejs", engine);
 
 app.set("views", path.join(__dirname, "views"));
@@ -23,6 +36,14 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 app.use("/foodtruck", foodtruckRouter);
 app.use("/foodtruck/:id/review", reviewRouter);
