@@ -4,6 +4,7 @@ const AppError = require("../utils/AppError");
 const CatchAsync = require("../utils/CatchAsync");
 const { foodtruckSchema } = require("../schemas");
 const Foodtruck = require("../models/foodtruck");
+const { isLoggedIn } = require("../middleware");
 
 const validateFoodtruck = (req, res, next) => {
   const { error } = foodtruckSchema.validate(req.body);
@@ -23,12 +24,13 @@ router.get(
   })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("foodtrucks/new");
 });
 
 router.post(
   "/",
+  isLoggedIn,
   validateFoodtruck,
   CatchAsync(async (req, res, next) => {
     const newFoodtruck = new Foodtruck(req.body.foodtruck);
@@ -53,6 +55,7 @@ router.get(
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
     const foodtruck = await Foodtruck.findById(id);
@@ -62,6 +65,7 @@ router.get(
 
 router.put(
   "/:id",
+  isLoggedIn,
   validateFoodtruck,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
@@ -75,6 +79,7 @@ router.put(
 
 router.delete(
   "/:id",
+  isLoggedIn,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
     await Foodtruck.findByIdAndDelete(id);
