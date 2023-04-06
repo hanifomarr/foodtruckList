@@ -7,13 +7,19 @@ router.get("/register", (req, res) => {
   res.render("users/register");
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
     const user = new User({ username, email });
     const registerUser = await User.register(user, password);
-    req.flash("success", "Succefully register");
-    res.redirect("/");
+    req.login(registerUser, (err) => {
+      if (err) {
+        return next(err);
+      } else {
+        req.flash("success", "Succefully register");
+        res.redirect("/");
+      }
+    });
   } catch (e) {
     req.flash("error", e.message);
     res.redirect("/register");
@@ -28,11 +34,14 @@ router.post(
   "/login",
   passport.authenticate("local", {
     failureFlash: true,
+    keepSessionInfo: true,
     failureRedirect: "/login",
   }),
   (req, res) => {
     req.flash("success", "Succefully register");
-    res.redirect("/foodtruck");
+    const loginRedirect = req.session.returnTo || "/foodtruck";
+    delete req.session.returnTo;
+    res.redirect(loginRedirect);
   }
 );
 
