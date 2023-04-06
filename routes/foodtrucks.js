@@ -1,20 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const AppError = require("../utils/AppError");
 const CatchAsync = require("../utils/CatchAsync");
-const { foodtruckSchema } = require("../schemas");
 const Foodtruck = require("../models/foodtruck");
-const { isLoggedIn } = require("../middleware");
-
-const validateFoodtruck = (req, res, next) => {
-  const { error } = foodtruckSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new AppError(msg, 500);
-  } else {
-    next();
-  }
-};
+const { isLoggedIn, isAuhtor, validateFoodtruck } = require("../middleware");
+const AppError = require("../utils/AppError");
+const { foodtruckSchema } = require("../schemas");
 
 router.get(
   "/",
@@ -34,6 +24,7 @@ router.post(
   validateFoodtruck,
   CatchAsync(async (req, res, next) => {
     const newFoodtruck = new Foodtruck(req.body.foodtruck);
+    newFoodtruck.author = req.user._id;
     await newFoodtruck.save();
     req.flash("success", "Successfully added");
     res.redirect(`/foodtruck/${newFoodtruck._id}`);
@@ -44,7 +35,9 @@ router.get(
   "/:id",
   CatchAsync(async (req, res) => {
     const { id } = req.params;
-    const foodtruck = await Foodtruck.findById(id).populate("reviews");
+    const foodtruck = await Foodtruck.findById(id)
+      .populate("reviews")
+      .populate("author");
     if (!foodtruck) {
       req.flash("error", "Foodtruck not found");
       return res.redirect("/foodtruck");
@@ -56,9 +49,14 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isAuhtor,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
     const foodtruck = await Foodtruck.findById(id);
+    if (!foodtruck) {
+      req.flash("error", "Foodtruck Not found");
+      return res.redirect(`/foodtruck`);
+    }
     res.render("foodtrucks/edit", { foodtruck });
   })
 );
@@ -66,6 +64,7 @@ router.get(
 router.put(
   "/:id",
   isLoggedIn,
+  isAuhtor,
   validateFoodtruck,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
@@ -73,13 +72,14 @@ router.put(
       ...req.body.foodtruck,
     });
     req.flash("success", "Successfully updated");
-    res.redirect(`/foodtruck/${updateFoodtruck._id}`);
+    res.redirect(`/foodtruck/${id}`);
   })
 );
 
 router.delete(
   "/:id",
   isLoggedIn,
+  isAuhtor,
   CatchAsync(async (req, res) => {
     const { id } = req.params;
     await Foodtruck.findByIdAndDelete(id);

@@ -17,20 +17,25 @@
                     <li class="list-group-item">
                         <%= foodtruck.location %>
                     </li>
+                    <li class="list-group-item">
+                        Created by: <%= foodtruck.author.username %>
+                    </li>
                 </ul>
-                <div class=" d-flex justify-content-between card-body">
-                    <div>
-                        <a href="/foodtruck/<%= foodtruck._id %>/edit"
-                            class="card-link btn btn-primary text-white">Update
-                            Venue</a>
-                        <a href="/foodtruck" class="btn card-link">Back</a>
+                <% if(currentUser && foodtruck.author.equals(currentUser._id)) { %>
+                    <div class=" d-flex justify-content-between card-body">
+                        <div>
+                            <a href="/foodtruck/<%= foodtruck._id %>/edit"
+                                class="card-link btn btn-primary text-white">Update
+                                Venue</a>
+                            <a href="/foodtruck" class="btn card-link">Back</a>
+                        </div>
+                        <div>
+                            <form action="/foodtruck/<%= foodtruck._id %>?_method=DELETE" method="post">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </div>
-                    <div>
-                        <form action="/foodtruck/<%= foodtruck._id %>?_method=DELETE" method="post">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                </div>
+                    <% } %>
             </div>
 
         </div>

@@ -8,6 +8,7 @@ const foodtruckSchema = new Schema({
   img: String,
   desc: String,
   price: Number,
+  author: { type: Schema.Types.ObjectId, ref: "User" },
   reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 });
 

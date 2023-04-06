@@ -20,6 +20,7 @@ const seedDB = async () => {
     const random = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 35) + 10;
     const newFoodtruck = new Foodtruck({
+      author: "642e541cf62949c30e13c645",
       name: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random].city}, ${cities[random].state}`,
       img: "https://placeimg.com/640/480/any",
