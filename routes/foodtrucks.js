@@ -36,7 +36,7 @@ router.get(
   CatchAsync(async (req, res) => {
     const { id } = req.params;
     const foodtruck = await Foodtruck.findById(id)
-      .populate("reviews")
+      .populate({ path: "reviews", populate: { path: "author" } })
       .populate("author");
     if (!foodtruck) {
       req.flash("error", "Foodtruck not found");

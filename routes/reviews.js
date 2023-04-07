@@ -1,27 +1,19 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const AppError = require("../utils/AppError");
+
+const { validateReview, isLoggedIn, isReviewAuthor } = require("../middleware");
 const CatchAsync = require("../utils/CatchAsync");
 const Foodtruck = require("../models/foodtruck");
 const Review = require("../models/review");
-const { reviewSchema } = require("../schemas");
-
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new AppError(msg, 500);
-  } else {
-    next();
-  }
-};
 
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
   CatchAsync(async (req, res) => {
     const foodtruck = await Foodtruck.findById(req.params.id);
     const review = new Review(req.body.review);
+    review.author = req.user._id;
     foodtruck.reviews.push(review);
     await review.save();
     await foodtruck.save();
@@ -31,6 +23,8 @@ router.post(
 
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
   CatchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Foodtruck.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
