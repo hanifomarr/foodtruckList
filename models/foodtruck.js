@@ -5,7 +5,12 @@ const Schema = mongoose.Schema;
 const foodtruckSchema = new Schema({
   name: String,
   location: String,
-  img: String,
+  images: [
+    {
+      url: String,
+      filename: String,
+    },
+  ],
   desc: String,
   price: Number,
   author: { type: Schema.Types.ObjectId, ref: "User" },

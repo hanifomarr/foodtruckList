@@ -11,12 +11,12 @@ const foodtrucks = require("../controllers/foodtrucks");
 router
   .route("/")
   .get(CatchAsync(foodtrucks.index))
-  // .post(isLoggedIn, validateFoodtruck, CatchAsync(foodtrucks.createFoodtruck));
-  .post(upload.single("img"), async (req, res) => {
-    console.log(req.body, req.file);
-    res.send("WROKED");
-  });
-
+  .post(
+    isLoggedIn,
+    upload.array("img"),
+    validateFoodtruck,
+    CatchAsync(foodtrucks.createFoodtruck)
+  );
 router.get("/new", isLoggedIn, foodtrucks.createFormFoodtruck);
 
 router

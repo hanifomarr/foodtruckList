@@ -11,8 +11,13 @@ module.exports.createFormFoodtruck = (req, res) => {
 
 module.exports.createFoodtruck = async (req, res, next) => {
   const newFoodtruck = new Foodtruck(req.body.foodtruck);
+  newFoodtruck.images = req.files.map((f) => ({
+    url: f.path,
+    filename: f.filename,
+  }));
   newFoodtruck.author = req.user._id;
   await newFoodtruck.save();
+  console.log(newFoodtruck);
   req.flash("success", "Successfully added");
   res.redirect(`/foodtruck/${newFoodtruck._id}`);
 };
