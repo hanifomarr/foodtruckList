@@ -3,43 +3,62 @@
 
     <div class="row">
         <div class="col-6">
-            <div class="card">
-                <% for(let img of foodtruck.images ){ %>
-                    <img src="<%= img.url %>" class="card-img-top" alt="...">
-                    <% } %>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <%= foodtruck.name %>
-                            </h5>
-                            <p class="card-text">
-                                <%= foodtruck.desc %>
-                            </p>
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <%foodtruck.images.forEach((img, i)=> { %>
+                        <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                            <img src="<%= img.url  %>" class="d-block w-100" alt="...">
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">RM <%= foodtruck.price %>
-                            </li>
-                            <li class="list-group-item">
-                                <%= foodtruck.location %>
-                            </li>
-                            <li class="list-group-item">
-                                Created by: <%= foodtruck.author.username %>
-                            </li>
-                        </ul>
-                        <% if(currentUser && foodtruck.author.equals(currentUser._id)) { %>
-                            <div class=" d-flex justify-content-between card-body">
-                                <div>
-                                    <a href="/foodtruck/<%= foodtruck._id %>/edit"
-                                        class="card-link btn btn-primary text-white">Update
-                                        Venue</a>
-                                    <a href="/foodtruck" class="btn card-link">Back</a>
-                                </div>
-                                <div>
-                                    <form action="/foodtruck/<%= foodtruck._id %>?_method=DELETE" method="post">
-                                        <button class="btn btn-danger">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <% } %>
+                        <% }) %>
+                </div>
+                <% if(foodtruck.images.length> 1){ %>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <% } %>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= foodtruck.name %>
+                    </h5>
+                    <p class="card-text">
+                        <%= foodtruck.desc %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">RM <%= foodtruck.price %>
+                    </li>
+                    <li class="list-group-item">
+                        <%= foodtruck.location %>
+                    </li>
+                    <li class="list-group-item">
+                        Created by: <%= foodtruck.author.username %>
+                    </li>
+                </ul>
+                <% if(currentUser && foodtruck.author.equals(currentUser._id)) { %>
+                    <div class=" d-flex justify-content-between card-body">
+                        <div>
+                            <a href="/foodtruck/<%= foodtruck._id %>/edit"
+                                class="card-link btn btn-primary text-white">Update
+                                Venue</a>
+                            <a href="/foodtruck" class="btn card-link">Back</a>
+                        </div>
+                        <div>
+                            <form action="/foodtruck/<%= foodtruck._id %>?_method=DELETE" method="post">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <% } %>
             </div>
 
         </div>

@@ -31,6 +31,7 @@ module.exports.getFoodtruck = async (req, res) => {
     req.flash("error", "Foodtruck not found");
     return res.redirect("/foodtruck");
   }
+  console.log(foodtruck);
   res.render("foodtrucks/show", { foodtruck });
 };
 
