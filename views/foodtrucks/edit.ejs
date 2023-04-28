@@ -3,7 +3,7 @@
         <h1 class="text-center">Edit foodtruck</h1>
         <div class="col-6 offset-3">
             <form action="/foodtruck/<%= foodtruck._id %>?_method=PUT" method="post" class="needs-validation"
-                novalidate>
+                enctype="multipart/form-data" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">foodtruck Name</label>
                     <input type="text" class="form-control" id="name" name="foodtruck[name]"
@@ -15,9 +15,11 @@
                         value="<%= foodtruck.location %>" required>
                 </div>
                 <div class="mb-3">
-                    <label for="img" class="form-label">Image</label>
-                    <input type="text" class="form-control" id="img" name="foodtruck[img]" value="<%= foodtruck.img %>"
-                        required>
+                    <label for="img" class="form-label">Update Image</label>
+                    <input type="file" class="form-control" id="img" name="img" multiple required>
+                    <div class="invalid-feedback">
+                        Please insert a image.
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price</label>

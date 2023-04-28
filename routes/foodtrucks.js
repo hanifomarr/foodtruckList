@@ -25,6 +25,7 @@ router
   .put(
     isLoggedIn,
     isAuhtor,
+    upload.array("img"),
     validateFoodtruck,
     CatchAsync(foodtrucks.editFoodtruck)
   )

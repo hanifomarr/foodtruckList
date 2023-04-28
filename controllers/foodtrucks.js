@@ -50,6 +50,12 @@ module.exports.editFoodtruck = async (req, res) => {
   const updateFoodtruck = await Foodtruck.findByIdAndUpdate(id, {
     ...req.body.foodtruck,
   });
+  const imgs = req.files.map((f) => ({
+    url: f.path,
+    filename: f.filename,
+  }));
+  updateFoodtruck.images.push(...imgs);
+  await updateFoodtruck.save();
   req.flash("success", "Successfully updated");
   res.redirect(`/foodtruck/${id}`);
 };
