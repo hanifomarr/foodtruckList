@@ -23,9 +23,18 @@ const seedDB = async () => {
       author: "6447b97412e207680f892526",
       name: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random].city}, ${cities[random].state}`,
-      img: "https://placeimg.com/640/480/any",
       desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, eligendi!",
       price: price,
+      images: [
+        {
+          url: "https://res.cloudinary.com/dq5gkn64d/image/upload/v1681462405/foodtrucks/qpbtjvdqmgfmrleio9to.jpg",
+          filename: "foodtrucks/qpbtjvdqmgfmrleio9to",
+        },
+        {
+          url: "https://res.cloudinary.com/dq5gkn64d/image/upload/v1681462405/foodtrucks/fzgokk94plkniqxk8jok.jpg",
+          filename: "foodtrucks/fzgokk94plkniqxk8jok",
+        },
+      ],
     });
     await newFoodtruck.save();
   }
