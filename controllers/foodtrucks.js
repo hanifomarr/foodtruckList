@@ -1,4 +1,5 @@
 const Foodtruck = require("../models/foodtruck");
+const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
   const foodtrucks = await Foodtruck.find({});
@@ -55,7 +56,14 @@ module.exports.editFoodtruck = async (req, res) => {
   }));
   updateFoodtruck.images.push(...imgs);
   await updateFoodtruck.save();
-  console.log(req.body);
+  if (req.body.deletedImages) {
+    for (let filename of req.body.deletedImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+    await updateFoodtruck.updateOne({
+      $pull: { images: { filename: { $in: req.body.deletedImages } } },
+    });
+  }
   req.flash("success", "Successfully updated");
   res.redirect(`/foodtruck/${id}`);
 };
