@@ -8,6 +8,7 @@ module.exports.foodtruckSchema = Joi.object({
     desc: Joi.string().required(),
     price: Joi.number().required().min(0),
   }).required(),
+  deletedImages: Joi.array(),
 });
 
 module.exports.reviewSchema = Joi.object({

@@ -31,7 +31,6 @@ module.exports.getFoodtruck = async (req, res) => {
     req.flash("error", "Foodtruck not found");
     return res.redirect("/foodtruck");
   }
-  console.log(foodtruck);
   res.render("foodtrucks/show", { foodtruck });
 };
 
@@ -56,6 +55,7 @@ module.exports.editFoodtruck = async (req, res) => {
   }));
   updateFoodtruck.images.push(...imgs);
   await updateFoodtruck.save();
+  console.log(req.body);
   req.flash("success", "Successfully updated");
   res.redirect(`/foodtruck/${id}`);
 };

@@ -39,6 +39,19 @@
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <% foodtruck.images.forEach((img, i)=> {%>
+                        <img src="<%= img.url %>" class="img-thumbnail" alt="">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="image-<%= i %>" name="deletedImages[]"
+                                value="<%= img.filename %>">
+                            <label class="form-check-label" for="image-<%= i %>">
+                                Delete
+                            </label>
+                        </div>
+                        <% }) %>
+                </div>
+
                 <button class="btn btn-info text-white" style>Update venue</button>
                 <a href="/foodtruck" class="btn">Cancel</a>
             </form>
