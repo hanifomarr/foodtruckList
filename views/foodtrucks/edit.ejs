@@ -40,16 +40,21 @@
                 </div>
 
                 <div class="mb-3">
-                    <% foodtruck.images.forEach((img, i)=> {%>
-                        <img src="<%= img.url %>" class="img-thumbnail" alt="">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="image-<%= i %>" name="deletedImages[]"
-                                value="<%= img.filename %>">
-                            <label class="form-check-label" for="image-<%= i %>">
-                                Delete
-                            </label>
-                        </div>
-                        <% }) %>
+                    <label for="" class="form-label">Delete</label>
+                    <div class="row row-cols-1 row-cols-md-4 g-4 mb-3">
+                        <% foodtruck.images.forEach((img, i)=> {%>
+                            <div class="col">
+                                <div class="card">
+                                    <img src="<%= img.thumbnail %>" class="card-img" alt="">
+                                    <div class="card-img-overlay text-end pt-1 pe-2">
+                                        <label class="visually-hidden" for="image-<%= i %>">Delete Image</label>
+                                        <input class="form-check-input" type="checkbox" id="image-<%= i %>"
+                                            name="deletedImages[]" value="<%= img.filename %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
                 </div>
 
                 <button class="btn btn-info text-white" style>Update venue</button>
