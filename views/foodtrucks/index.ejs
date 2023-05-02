@@ -4,7 +4,13 @@
         <div class="card mb-3">
             <div class="row">
                 <div class="col-md-4">
-                    <img class="image-fluid" src="<%= foodtruck.images[0].url %>" alt="" style="width: 22rem;">
+                    <% if(foodtruck.images.length){ %>
+                        <img class="image-fluid" src="<%= foodtruck.images[0].url %>" alt="" style="width: 22rem;">
+                        <% }else{%>
+                            <img class="image-fluid"
+                                src="https://res.cloudinary.com/dq5gkn64d/image/upload/v1682837804/foodtrucks/lda9qcnqsl0fd7xm1auo.jpg"
+                                alt="" style="width: 22rem;">
+                            <% } %>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
