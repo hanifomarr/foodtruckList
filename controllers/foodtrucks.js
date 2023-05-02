@@ -20,18 +20,17 @@ module.exports.createFoodtruck = async (req, res, next) => {
       limit: 1,
     })
     .send();
-  res.send(geoData.body.features[0].geometry.coordinates);
-
-  // const newFoodtruck = new Foodtruck(req.body.foodtruck);
-  // newFoodtruck.images = req.files.map((f) => ({
-  //   url: f.path,
-  //   filename: f.filename,
-  // }));
-  // newFoodtruck.author = req.user._id;
-  // await newFoodtruck.save();
-  // console.log(newFoodtruck);
-  // req.flash("success", "Successfully added");
-  // res.redirect(`/foodtruck/${newFoodtruck._id}`);
+  const newFoodtruck = new Foodtruck(req.body.foodtruck);
+  newFoodtruck.images = req.files.map((f) => ({
+    url: f.path,
+    filename: f.filename,
+  }));
+  newFoodtruck.geometry = geoData.body.features[0].geometry;
+  newFoodtruck.author = req.user._id;
+  await newFoodtruck.save();
+  console.log(newFoodtruck);
+  req.flash("success", "Successfully added");
+  res.redirect(`/foodtruck/${newFoodtruck._id}`);
 };
 
 module.exports.getFoodtruck = async (req, res) => {

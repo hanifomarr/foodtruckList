@@ -14,6 +14,17 @@ imageSchema.virtual("thumbnail").get(function () {
 const foodtruckSchema = new Schema({
   name: String,
   location: String,
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
   images: [imageSchema],
   desc: String,
   price: Number,
