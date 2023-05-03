@@ -31,6 +31,8 @@
 
 <script>
     const mapBoxToken = "<%- process.env.MAPBOX_TOKEN%>";
+    const foodtrucks = {features:<%- JSON.stringify(foodtrucks)%>}
+
 </script>
 
 <script src="/js/clusterMap.js"></script>
