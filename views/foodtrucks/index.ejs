@@ -1,4 +1,5 @@
 <% layout("layouts/boilerplate") -%>
+    <div id="map" style="width: 100%; height: 30rem;"></div>
     <h1>List of Foodtrucks</h1>
     <% for(let foodtruck of foodtrucks){ %>
         <div class="card mb-3">
@@ -25,7 +26,11 @@
                 </div>
             </div>
         </div>
+    <% } %>
+    <a href="/venue/new">Add new venue</a>\
 
-        <% } %>
+<script>
+    const mapBoxToken = "<%- process.env.MAPBOX_TOKEN%>";
+</script>
 
-            <a href="/venue/new">Add new venue</a>
+<script src="/js/clusterMap.js"></script>
