@@ -11,25 +11,31 @@ imageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
-const foodtruckSchema = new Schema({
-  name: String,
-  location: String,
-  geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      required: true,
+const opts = { toJSON: { virtuals: true } };
+const foodtruckSchema = new Schema(
+  {
+    name: String,
+    location: String,
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
-  },
-  images: [imageSchema],
-  desc: String,
-  price: Number,
-  author: { type: Schema.Types.ObjectId, ref: "User" },
-  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+    images: [imageSchema],
+    desc: String,
+    price: Number,
+    author: { type: Schema.Types.ObjectId, ref: "User" },
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+  },opts);
+
+foodtruckSchema.virtual("properties.popupMarkup").get(function () {
+  return`<a href="/foodtruck/${this._id}">${this.name}</a>`;
 });
 
 foodtruckSchema.post("findOneAndDelete", async function (data) {
